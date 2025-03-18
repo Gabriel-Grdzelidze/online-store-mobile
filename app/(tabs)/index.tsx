@@ -6,7 +6,7 @@ export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <Hero />
-      {/* <ProductList /> */}
+       <ProductList />
     </ScrollView>
   );
 }
