@@ -1,271 +1,289 @@
-import {StyleSheet,View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
 import {
   ArrowLeftCircleIcon,
   ArrowRightCircleIcon,
 } from "react-native-heroicons/solid";
 import Card from "../Card";
-import { useEffect, useState } from "react";
+import "../../global.css";
 
 const ProductList = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
+  const [fashionPage, setFashionPage] = useState(0);
+  const [electronicsPage, setElectronicsPage] = useState(0);
+  const [jewelleryPage, setJewelleryPage] = useState(0);
+  const itemsPerPage = 3;
+
+  const nextPageFashion = () => {
+    if ((fashionPage + 1) * itemsPerPage < fashionProducts.length) {
+      setFashionPage(fashionPage + 1);
+    }
+  };
+
+  const prevPageFashion = () => {
+    if (fashionPage > 0) {
+      setFashionPage(fashionPage - 1);
+    }
+  };
+
+  const nextPageElectronics = () => {
+    if ((electronicsPage + 1) * itemsPerPage < electronicsProducts.length) {
+      setElectronicsPage(electronicsPage + 1);
+    }
+  };
+
+  const prevPageElectronics = () => {
+    if (electronicsPage > 0) {
+      setElectronicsPage(electronicsPage - 1);
+    }
+  };
+
+  const nextPageJewellery = () => {
+    if ((jewelleryPage + 1) * itemsPerPage < jewelleryProducts.length) {
+      setJewelleryPage(jewelleryPage + 1);
+    }
+  };
+
+  const prevPageJewellery = () => {
+    if (jewelleryPage > 0) {
+      setJewelleryPage(jewelleryPage - 1);
+    }
+  };
 
   useEffect(() => {
-    const fecthProducts = async () => {
-      const result = fecth("/api/get-products", {
-        method: "GET",
-        header: {
-          "Context-type": "aplication/json",
-        },
-      });
-      const data = await result.json();
-      setLoading(true);
-      setProducts(data);
+    const url = "http://192.168.100.146:3000/api/get-products";
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(url);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fecthProducts();
-    setLoading(false);
+    fetchProducts();
   }, []);
 
-  if (loading) return <Text>loading</Text>;
+  const fashionProducts = products.filter(
+    (product) => product.category === "clothes"
+  );
+  const electronicsProducts = products.filter(
+    (product) => product.category === "electronic"
+  );
+  const jewelleryProducts = products.filter(
+    (product) => product.category === "jewllery"
+  );
+
+  if (loading) return <Text>Loading...</Text>;
+
   return (
-    <View className={css.section}>
+    <View style={{ marginBottom: 200 }}>
+      {/* New Fashion Section */}
       <View>
-        <Text className={css.h1}>New Fashion</Text>
-        <View className={css.maindiv}>
-          <TouchableOpacity>
-            <ArrowLeftCircleIcon size={30} color={"#f1f1f1"} />
-          </TouchableOpacity>
-          {products?.map((product) => (
-            <TouchableOpacity key={product.id}>
-              <Card
-                id={product.id}
-                title={product.title}
-                price={product.price}
-                image={product.mainImg}
+        <View
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 35, display: "flex" }}>New Fashion</Text>
+        </View>
+
+        <View>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
+          >
+            {fashionProducts
+              ?.slice(fashionPage * itemsPerPage, fashionPage * itemsPerPage + itemsPerPage)
+              .map((product) => (
+                <TouchableOpacity key={product.id}>
+                  <Card
+                    id={product.id}
+                    title={product.title}
+                    price={product.price}
+                    image={product.img1}
+                  />
+                </TouchableOpacity>
+              ))}
+          </View>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "row",
+              marginTop: 20,
+              gap: 100,
+            }}
+          >
+            <TouchableOpacity onPress={prevPageFashion} disabled={fashionPage === 0}>
+              <ArrowLeftCircleIcon
+                size={45}
+                color={fashionPage === 0 ? "#ccc" : "#2b2a29"}
               />
             </TouchableOpacity>
-          ))}
-          <TouchableOpacity>
-            <ArrowRightCircleIcon size={30} color={"#f1f1f1"} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={nextPageFashion}
+              disabled={(fashionPage + 1) * itemsPerPage >= fashionProducts.length}
+            >
+              <ArrowRightCircleIcon
+                size={45}
+                color={
+                  (fashionPage + 1) * itemsPerPage >= fashionProducts.length
+                    ? "#ccc"
+                    : "#2b2a29"
+                }
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
-      {/* Electronics Section */}
+      {/* Newest Electronics Section */}
       <View>
-        <Text>Electronics</Text>
+        <View
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 35, marginTop: 50, display: "flex" }}>
+            Newest Electronics
+          </Text>
+        </View>
         <View>
-          <TouchableOpacity>
-            <ArrowLeftCircleIcon size={30} color={"#f1f1f1"} />
-          </TouchableOpacity>
-          {/* {Electronics?.map((product) => (
-            <TouchableOpacity key={product.id}>
-              <Card
-                id={product.id}
-                title={product.title}
-                price={product.price}
-                image={product.mainImg}
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
+          >
+            {electronicsProducts
+              ?.slice(electronicsPage * itemsPerPage, electronicsPage * itemsPerPage + itemsPerPage)
+              .map((product) => (
+                <TouchableOpacity key={product.id}>
+                  <Card
+                    id={product.id}
+                    title={product.title}
+                    price={product.price}
+                    image={product.img1}
+                  />
+                </TouchableOpacity>
+              ))}
+          </View>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "row",
+              marginTop: 20,
+              gap: 100,
+            }}
+          >
+            <TouchableOpacity onPress={prevPageElectronics} disabled={electronicsPage === 0}>
+              <ArrowLeftCircleIcon
+                size={45}
+                color={electronicsPage === 0 ? "#ccc" : "#2b2a29"}
               />
             </TouchableOpacity>
-          ))} */}
-          <TouchableOpacity>
-            <ArrowRightCircleIcon size={30} color={"#f1f1f1"} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={nextPageElectronics}
+              disabled={(electronicsPage + 1) * itemsPerPage >= electronicsProducts.length}
+            >
+              <ArrowRightCircleIcon
+                size={45}
+                color={
+                  (electronicsPage + 1) * itemsPerPage >= electronicsProducts.length
+                    ? "#ccc"
+                    : "#2b2a29"
+                }
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
-      {/* Jewelry Section */}
+      {/* Finest Jewellery Section */}
       <View>
-        <Text>Jewelry</Text>
+        <View
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 35, marginTop: 50, display: "flex" }}>
+            Finest Jewellery
+          </Text>
+        </View>
         <View>
-          <TouchableOpacity>
-            <ArrowLeftCircleIcon size={30} color={"#f1f1f1"} />
-          </TouchableOpacity>
-          {/* {Jewelry?.map((product) => (
-            <TouchableOpacity key={product.id}>
-              <Card
-                id={product.id}
-                title={product.title}
-                price={product.price}
-                image={product.mainImg}
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
+          >
+            {jewelleryProducts
+              ?.slice(jewelleryPage * itemsPerPage, jewelleryPage * itemsPerPage + itemsPerPage)
+              .map((product) => (
+                <TouchableOpacity key={product.id}>
+                  <Card
+                    id={product.id}
+                    title={product.title}
+                    price={product.price}
+                    image={product.img1}
+                  />
+                </TouchableOpacity>
+              ))}
+          </View>
+          <View
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "row",
+              marginTop: 20,
+              gap: 100,
+            }}
+          >
+            <TouchableOpacity onPress={prevPageJewellery} disabled={jewelleryPage === 0}>
+              <ArrowLeftCircleIcon
+                size={45}
+                color={jewelleryPage === 0 ? "#ccc" : "#2b2a29"}
               />
             </TouchableOpacity>
-          ))} */}
-          <TouchableOpacity>
-            <ArrowRightCircleIcon size={30} color={"#f1f1f1"} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={nextPageJewellery}
+              disabled={(jewelleryPage + 1) * itemsPerPage >= jewelleryProducts.length}
+            >
+              <ArrowRightCircleIcon
+                size={45}
+                color={
+                  (jewelleryPage + 1) * itemsPerPage >= jewelleryProducts.length
+                    ? "#ccc"
+                    : "#2b2a29"
+                }
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
   );
 };
-
-
-
-const css = StyleSheet.create({
-  thediv: {
-    alignItems: "center",
-  },
-  section: {
-    width: "100%",
-    marginBottom: 250,
-  },
-  maindiv: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: 1300,
-    marginLeft: "auto",
-    marginRight: "auto",
-    paddingRight: 100,
-  },
-  h1: {
-    fontSize: 50,
-    fontWeight: "700",
-    color: "#2b2a29",
-    marginVertical: 30,
-  },
-  img: {
-    width: "100%",
-    height: 300,
-    resizeMode: "cover",
-  },
-  cardTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#2b2a29",
-    marginBottom: 10,
-  },
-  span1: {
-    color: "#fd7e14",
-    fontSize: 18,
-  },
-  span2: {
-    color: "#2b2a29",
-    fontSize: 18,
-  },
-  card: {
-    padding: 30,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    fontWeight: "700",
-    elevation: 5,
-    height: 525,
-    minWidth: 250,
-    width: "100%",
-    maxWidth: 300,
-    boxSizing: "border-box",
-    transitionDuration: "0.6s",
-    cursor: "pointer",
-  },
-  adiv: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 15,
-  },
-  a1: {
-    color: "#fd7e14",
-    fontWeight: "600",
-    fontSize: 19,
-  },
-  adiv2: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingTop: 90,
-  },
-  a2: {
-    color: "#2b2a29",
-    fontWeight: "600",
-    fontSize: 19,
-  },
-  otherdiv: {
-    marginTop: 35,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  adivelectro: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 92,
-  },
-  li: {
-    color: "#f1f1f1",
-    transitionDuration: "0.6s",
-  },
-  sectionBlack: {
-    backgroundColor: "#252525",
-    width: "100%",
-    paddingVertical: 50,
-  },
-  h1B: {
-    fontSize: 50,
-    color: "#f1f1f1",
-    fontWeight: "800",
-    letterSpacing: 1.4,
-    margin: 10,
-  },
-  inputdiv: {
-    width: "40%",
-    borderBottomWidth: 3,
-    borderBottomColor: "#f1f1f1",
-    marginLeft: "auto",
-    marginRight: "auto",
-    padding: 10,
-  },
-  input: {
-    backgroundColor: "transparent",
-    width: "80%",
-    color: "#f1f1f1",
-    padding: 5,
-    fontWeight: "600",
-    fontSize: 19,
-  },
-  inputPlaceholder: {
-    color: "#f1f1f1",
-    fontWeight: "600",
-    fontSize: 19,
-  },
-  inputFocus: {
-    outline: "none",
-    borderWidth: 0,
-  },
-  button: {
-    color: "#fd7e14",
-    fontSize: 19,
-    fontWeight: "500",
-    transitionDuration: "0.6s",
-  },
-  sectionBlackList: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 30,
-    margin: 20,
-    fontSize: 18,
-  },
-  sectionBlackP: {
-    color: "#f1f1f1",
-    marginBottom: 10,
-  },
-  icons: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 250,
-    marginTop: 100,
-  },
-  icon: {
-    fontSize: 70,
-    color: "#f1f1f1",
-    backgroundColor: "#2b2a29",
-    padding: 20,
-    borderRadius: 5,
-    transitionDuration: "0.6s",
-  },
-});
 
 export default ProductList;

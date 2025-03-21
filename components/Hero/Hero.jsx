@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { Link } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
@@ -20,6 +21,7 @@ const Hero = () => {
 
   return (
     <SafeAreaView style={css.safeAreaView}>
+      <StatusBar barStyle={"dark-content"} />
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={css.mainView}>
           <Image
@@ -86,18 +88,26 @@ const Hero = () => {
             </View>
             <View>
               <TouchableOpacity
-                style={{ display: "flex", flexDirection: "row", marginBottom: 13 }}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginBottom: 13,
+                }}
               >
                 <UserIcon size={20} color={"white"} />
                 <Text style={{ color: "white" }}>Account</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{ display: "flex", flexDirection: "row" }}>
+              <TouchableOpacity
+                style={{ display: "flex", flexDirection: "row" }}
+              >
                 <ShoppingCartIcon size={20} color={"white"} />
                 <Text style={{ color: "white" }}>Cart</Text>
               </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity style={css.shopButton}><Text>Shop Now</Text></TouchableOpacity>
+          <TouchableOpacity style={css.shopButton}>
+            <Text>Shop Now</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -115,6 +125,7 @@ const css = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
+    height:"100%"
   },
   ul: {
     flexDirection: "row",
@@ -137,10 +148,13 @@ const css = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    height:700,
+    padding:0,
+    margin:0
   },
   titleWrapper: {
     alignItems: "center",
-    marginTop: "25%", 
+    marginTop: "25%",
   },
   titleText: {
     color: "#f1f1f1",
@@ -159,12 +173,12 @@ const css = StyleSheet.create({
     width: 100,
     backgroundColor: "#fff",
   },
-  shopButton:{
-    backgroundColor:"#FFA725",
-    paddingHorizontal:15,
-    paddingVertical:10,
-    marginTop:70
-  }
+  shopButton: {
+    backgroundColor: "#FFA725",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginTop: 70,
+  },
 });
 
 export default Hero;
