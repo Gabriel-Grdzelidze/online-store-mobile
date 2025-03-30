@@ -10,15 +10,18 @@ import {
   ScrollView,
   StatusBar,
 } from "react-native";
-import { Link } from "expo-router";
+
 import { Picker } from "@react-native-picker/picker";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { UserIcon, ShoppingCartIcon } from "react-native-heroicons/solid";
 import theme from "../../theme/index";
+import { useNavigation } from "@react-navigation/native";
+
+
 
 const Hero = () => {
   const [show, setShow] = useState(false);
-
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={css.safeAreaView}>
       <StatusBar barStyle={"dark-content"} />
@@ -29,21 +32,24 @@ const Hero = () => {
             source={require("../../assets/images/back.jpg")}
           />
           <View style={css.ul}>
-            <Link style={css.link} href={""}>
-              Best Sellers
-            </Link>
-            <Link style={css.link} href={""}>
-              Gift Ideas
-            </Link>
-            <Link style={css.link} href={""}>
-              New Releases
-            </Link>
-            <Link style={css.link} href={""}>
-              Customer Service
-            </Link>
-            <Link style={css.link} href={"/(tabs)/Account"}>
-              Dashboard
-            </Link>
+            <TouchableOpacity style={css.link} >
+              <Text style={css.link}> Best Sellers</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={css.link} >
+              <Text style={css.link}> Gift Ideas</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={css.link} >
+              <Text style={css.link}> New Releases</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={css.link} >
+              <Text style={css.link}>Customer Service</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={css.link}
+              onPress={() => navigation.navigate("Dashboard")}
+            >
+              <Text style={css.link}> Dashboard</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={css.titleWrapper}>
@@ -125,7 +131,7 @@ const css = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
-    height:"100%"
+    height: "100%",
   },
   ul: {
     flexDirection: "row",
@@ -148,9 +154,9 @@ const css = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    height:700,
-    padding:0,
-    margin:0
+    height: 700,
+    padding: 0,
+    margin: 0,
   },
   titleWrapper: {
     alignItems: "center",

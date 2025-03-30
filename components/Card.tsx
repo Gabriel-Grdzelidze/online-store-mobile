@@ -8,23 +8,24 @@ const Card = React.memo(({ id, title, image, price }) => {
   return (
     <View style={styles.card}>
       <TouchableOpacity onPress={() => router.push(`/product/${id}`)}>
-        <Text style={styles.cardTitle }>{title}</Text>
+        <Text style={styles.cardTitle}>{title}</Text>
         <Text>
           <Text style={styles.span1}>Price: </Text>
           <Text style={styles.span2}>${price}</Text>
         </Text>
         <Image
           style={styles.image}
-          source={{uri:image}}
-          resizeMode="cover"
+          source={{
+            uri: image,
+          }}
         />
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity>
-            <Text style={{fontSize:10}}>Buy Now</Text>
+            <Text style={{ fontSize: 10 }}>Buy Now</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
-            <Text style={{fontSize:10,color:'#fd7e14'}}>See More</Text>
+            <Text style={{ fontSize: 10, color: "#fd7e14" }}>See More</Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -71,7 +72,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    gap:15,
+    gap: 15,
   },
 });
 

@@ -6,6 +6,7 @@ import {
 } from "react-native-heroicons/solid";
 import Card from "../Card";
 import "../../global.css";
+import { Image } from "react-native";
 
 const ProductList = () => {
   const [loading, setLoading] = useState(true);
@@ -69,6 +70,10 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
+  
+
+
+
   const fashionProducts = products.filter(
     (product) => product.category === "clothes"
   );
@@ -112,7 +117,7 @@ const ProductList = () => {
                     id={product.id}
                     title={product.title}
                     price={product.price}
-                    image={product.img1}
+                    image={product.mainImg}
                   />
                 </TouchableOpacity>
               ))}
@@ -179,7 +184,7 @@ const ProductList = () => {
                     id={product.id}
                     title={product.title}
                     price={product.price}
-                    image={product.img1}
+                    image={product.mainImg}
                   />
                 </TouchableOpacity>
               ))}
@@ -246,7 +251,7 @@ const ProductList = () => {
                     id={product.id}
                     title={product.title}
                     price={product.price}
-                    image={product.img1}
+                    image={product.mainImg}
                   />
                 </TouchableOpacity>
               ))}
@@ -281,6 +286,7 @@ const ProductList = () => {
             </TouchableOpacity>
           </View>
         </View>
+        
       </View>
     </View>
   );
