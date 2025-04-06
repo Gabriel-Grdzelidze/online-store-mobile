@@ -6,10 +6,10 @@ import {
 } from "react-native-heroicons/solid";
 import Card from "../Card";
 import "../../global.css";
-import { Image } from "react-native";
+import { GET_PRODUCTS } from "@/graphql/query";
+import { useQuery } from "@apollo/client";
 
 const ProductList = () => {
-  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [fashionPage, setFashionPage] = useState(0);
   const [electronicsPage, setElectronicsPage] = useState(0);
@@ -52,27 +52,15 @@ const ProductList = () => {
     }
   };
 
+  const { data, loading, error } = useQuery(GET_PRODUCTS);
+
   useEffect(() => {
-    const url = "http://192.168.100.146:3000/api/get-products";
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(url);
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (data?.products) {
+      setProducts(data.products);
+    }
+  }, [data]);
 
-    fetchProducts();
-  }, []);
-
-  
-
-
+  if (loading) return <Text>Loading...</Text>;
 
   const fashionProducts = products.filter(
     (product) => product.category === "clothes"
@@ -84,7 +72,10 @@ const ProductList = () => {
     (product) => product.category === "jewllery"
   );
 
-  if (loading) return <Text>Loading...</Text>;
+  if (error) {
+    console.error("Error fetching products:", error);
+    return <Text>Error fetching products</Text>;
+  }
 
   return (
     <View style={{ marginBottom: 200 }}>
@@ -110,7 +101,10 @@ const ProductList = () => {
             }}
           >
             {fashionProducts
-              ?.slice(fashionPage * itemsPerPage, fashionPage * itemsPerPage + itemsPerPage)
+              ?.slice(
+                fashionPage * itemsPerPage,
+                fashionPage * itemsPerPage + itemsPerPage
+              )
               .map((product) => (
                 <TouchableOpacity key={product.id}>
                   <Card
@@ -131,7 +125,10 @@ const ProductList = () => {
               gap: 100,
             }}
           >
-            <TouchableOpacity onPress={prevPageFashion} disabled={fashionPage === 0}>
+            <TouchableOpacity
+              onPress={prevPageFashion}
+              disabled={fashionPage === 0}
+            >
               <ArrowLeftCircleIcon
                 size={45}
                 color={fashionPage === 0 ? "#ccc" : "#2b2a29"}
@@ -139,7 +136,9 @@ const ProductList = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={nextPageFashion}
-              disabled={(fashionPage + 1) * itemsPerPage >= fashionProducts.length}
+              disabled={
+                (fashionPage + 1) * itemsPerPage >= fashionProducts.length
+              }
             >
               <ArrowRightCircleIcon
                 size={45}
@@ -177,7 +176,10 @@ const ProductList = () => {
             }}
           >
             {electronicsProducts
-              ?.slice(electronicsPage * itemsPerPage, electronicsPage * itemsPerPage + itemsPerPage)
+              ?.slice(
+                electronicsPage * itemsPerPage,
+                electronicsPage * itemsPerPage + itemsPerPage
+              )
               .map((product) => (
                 <TouchableOpacity key={product.id}>
                   <Card
@@ -198,7 +200,10 @@ const ProductList = () => {
               gap: 100,
             }}
           >
-            <TouchableOpacity onPress={prevPageElectronics} disabled={electronicsPage === 0}>
+            <TouchableOpacity
+              onPress={prevPageElectronics}
+              disabled={electronicsPage === 0}
+            >
               <ArrowLeftCircleIcon
                 size={45}
                 color={electronicsPage === 0 ? "#ccc" : "#2b2a29"}
@@ -206,12 +211,16 @@ const ProductList = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={nextPageElectronics}
-              disabled={(electronicsPage + 1) * itemsPerPage >= electronicsProducts.length}
+              disabled={
+                (electronicsPage + 1) * itemsPerPage >=
+                electronicsProducts.length
+              }
             >
               <ArrowRightCircleIcon
                 size={45}
                 color={
-                  (electronicsPage + 1) * itemsPerPage >= electronicsProducts.length
+                  (electronicsPage + 1) * itemsPerPage >=
+                  electronicsProducts.length
                     ? "#ccc"
                     : "#2b2a29"
                 }
@@ -244,7 +253,10 @@ const ProductList = () => {
             }}
           >
             {jewelleryProducts
-              ?.slice(jewelleryPage * itemsPerPage, jewelleryPage * itemsPerPage + itemsPerPage)
+              ?.slice(
+                jewelleryPage * itemsPerPage,
+                jewelleryPage * itemsPerPage + itemsPerPage
+              )
               .map((product) => (
                 <TouchableOpacity key={product.id}>
                   <Card
@@ -265,7 +277,10 @@ const ProductList = () => {
               gap: 100,
             }}
           >
-            <TouchableOpacity onPress={prevPageJewellery} disabled={jewelleryPage === 0}>
+            <TouchableOpacity
+              onPress={prevPageJewellery}
+              disabled={jewelleryPage === 0}
+            >
               <ArrowLeftCircleIcon
                 size={45}
                 color={jewelleryPage === 0 ? "#ccc" : "#2b2a29"}
@@ -273,7 +288,9 @@ const ProductList = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={nextPageJewellery}
-              disabled={(jewelleryPage + 1) * itemsPerPage >= jewelleryProducts.length}
+              disabled={
+                (jewelleryPage + 1) * itemsPerPage >= jewelleryProducts.length
+              }
             >
               <ArrowRightCircleIcon
                 size={45}
@@ -286,7 +303,6 @@ const ProductList = () => {
             </TouchableOpacity>
           </View>
         </View>
-        
       </View>
     </View>
   );

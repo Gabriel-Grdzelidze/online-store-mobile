@@ -10,18 +10,20 @@ import {
   ScrollView,
   StatusBar,
 } from "react-native";
-
+import { Link } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import { UserIcon, ShoppingCartIcon } from "react-native-heroicons/solid";
 import theme from "../../theme/index";
-import { useNavigation } from "@react-navigation/native";
+
+
 
 
 
 const Hero = () => {
   const [show, setShow] = useState(false);
-  const navigation = useNavigation();
+
+
   return (
     <SafeAreaView style={css.safeAreaView}>
       <StatusBar barStyle={"dark-content"} />
@@ -44,12 +46,12 @@ const Hero = () => {
             <TouchableOpacity style={css.link} >
               <Text style={css.link}>Customer Service</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <Link
               style={css.link}
-              onPress={() => navigation.navigate("Dashboard")}
+              href={"/screens/dashboard"}
             >
-              <Text style={css.link}> Dashboard</Text>
-            </TouchableOpacity>
+              Dashboard
+            </Link>
           </View>
 
           <View style={css.titleWrapper}>
