@@ -1,6 +1,12 @@
-import { View , Text , TextInput } from "react-native";
-
+import { View , Text , TextInput , StyleSheet, Button } from "react-native";
+import { useState } from "react";
 const addProduct = () => {
+   const [title, setTitle] = useState("");
+    const [price, setPrice] = useState("");
+    const [mainimg, setMainimg] = useState("");
+    const [img1, setImg1] = useState("");
+    const [img2, setImg2] = useState("");
+    const [description, setDescription] = useState("");
      return (
         <View style={{ paddingLeft: 5 }}>
           <View
@@ -11,7 +17,7 @@ const addProduct = () => {
               marginTop: 20,
             }}
           >
-            <Text style={{ fontSize: 40 }}>Update the Product</Text>
+            <Text style={{ fontSize: 40 }}>Create Product</Text>
           </View>
           <View>
             <Text style={css.label}>Product Title</Text>
@@ -19,7 +25,7 @@ const addProduct = () => {
               onChangeText={setTitle}
               style={css.input}
               value={title}
-              placeholder="Enter new title"
+              placeholder="Enter title"
             />
           </View>
           <View>
@@ -28,7 +34,7 @@ const addProduct = () => {
               onChangeText={setPrice}
               style={css.input}
               value={price}
-              placeholder="Enter new price"
+              placeholder="Enter price"
             />
           </View>
           <View>
@@ -37,7 +43,7 @@ const addProduct = () => {
               onChangeText={setMainimg}
               style={css.input}
               value={mainimg}
-              placeholder="Enter new main image URL"
+              placeholder="Enter mainImage URL"
             />
           </View>
           <View>
@@ -46,7 +52,7 @@ const addProduct = () => {
               onChangeText={setImg1}
               style={css.input}
               value={img1}
-              placeholder="Enter new image 1 URL"
+              placeholder="Enter image 1 URL"
             />
           </View>
           <View>
@@ -55,7 +61,7 @@ const addProduct = () => {
               onChangeText={setImg2}
               style={css.input}
               value={img2}
-              placeholder="Enter new image 2 URL"
+              placeholder="Enter image 2 URL"
             />
           </View>
           <View>
@@ -64,31 +70,30 @@ const addProduct = () => {
               onChangeText={setDescription}
               style={css.input}
               value={description}
-              placeholder="Enter new description"
+              placeholder="Enter description"
               multiline
               numberOfLines={4}
             />
           </View>
     
           <View style={{ marginTop: 20 }}>
-            <Button
-              onPress={() => {
-                handleUpdate({
-                  id:productId,
-                  title,
-                  price,
-                  mainImg: mainimg,
-                  img1,
-                  img2,
-                  description,
-                });
-              }}
-              title={loading ? "updating product data..." : "update product data"}
-              style={{ backgroundColor: "#48A6A7" }}
-            />
+            
           </View>
         </View>
       );
 }
+
+export const css = StyleSheet.create({
+  label: {
+    fontSize: 20,
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  input: {
+    backgroundColor: "#E5E5E5",
+    width: "95%",
+    fontSize:15
+  },
+});
 
 export default addProduct;
